@@ -1,6 +1,4 @@
-# Installazione (una volta): cd backend && make pre-commit-install
-# Poi ad ogni `git commit` girano in automatico. Per lanciarli a mano:
-#   cd backend && uv run pre-commit run --all-files
+# To install (just once): cd backend && make pre-commit-install
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v5.0.0
