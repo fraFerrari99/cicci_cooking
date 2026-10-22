@@ -1,10 +1,3 @@
-"""Handler globali degli errori.
-
-Obiettivo: qualunque errore esca dall'API ha sempre la stessa forma
-(`ErrorResponse`) e porta il `request_id`, così il frontend lo mostra e noi
-lo ritroviamo nei log. Il 500 non espone mai dettagli interni al client.
-"""
-
 from http import HTTPStatus
 
 import structlog
@@ -30,8 +23,6 @@ def _error_response(
     body = ErrorResponse(
         error=ErrorBody(code=code, message=message, details=details, request_id=request_id)
     )
-    # L'header lo mettiamo anche qui: il 500 passa dal ServerErrorMiddleware di Starlette,
-    # che sta fuori dal nostro RequestIdMiddleware e quindi non lo attraversa in uscita.
     headers = {REQUEST_ID_HEADER: request_id} if request_id else None
     return JSONResponse(
         status_code=status_code, content=body.model_dump(exclude_none=True), headers=headers

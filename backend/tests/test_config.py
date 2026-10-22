@@ -1,7 +1,7 @@
 import pytest
 from pydantic import ValidationError
 
-from app.core.config import Settings
+from app.config import Settings
 
 
 def _settings(**kwargs: object) -> Settings:

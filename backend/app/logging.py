@@ -1,24 +1,16 @@
-"""Logging strutturato con structlog.
-
-In sviluppo: righe colorate leggibili. In produzione: JSON, una riga per evento,
-così Vercel (o qualunque aggregatore) le indicizza. Ogni riga porta il `request_id`
-messo nel contesto dal middleware, quindi si può filtrare tutto ciò che è successo
-dentro una singola richiesta.
-"""
-
 import logging
 import sys
 
 import structlog
 
-from app.core.config import Settings
+from app.config import Settings
 
 
 def configure_logging(settings: Settings) -> None:
     level = logging.getLevelName(settings.LOG_LEVEL or "INFO")
 
     shared_processors: list[structlog.types.Processor] = [
-        structlog.contextvars.merge_contextvars,  # porta dentro request_id e simili
+        structlog.contextvars.merge_contextvars,
         structlog.stdlib.add_log_level,
         structlog.stdlib.add_logger_name,
         structlog.processors.TimeStamper(fmt="iso", utc=True),
@@ -39,7 +31,6 @@ def configure_logging(settings: Settings) -> None:
         cache_logger_on_first_use=True,
     )
 
-    # Anche i log della libreria standard (uvicorn, fastapi) passano dal renderer structlog.
     formatter = structlog.stdlib.ProcessorFormatter(
         foreign_pre_chain=shared_processors,
         processors=[structlog.stdlib.ProcessorFormatter.remove_processors_meta, renderer],
@@ -52,7 +43,6 @@ def configure_logging(settings: Settings) -> None:
     root.addHandler(handler)
     root.setLevel(level)
 
-    # L'access log di uvicorn è ridondante: lo fa già il middleware con più contesto.
     logging.getLogger("uvicorn.access").disabled = True
     for name in ("uvicorn", "uvicorn.error"):
         logging.getLogger(name).handlers.clear()

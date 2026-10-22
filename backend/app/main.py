@@ -6,9 +6,9 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
 
-from app.core.config import Settings, get_settings
-from app.core.exceptions import register_exception_handlers
-from app.core.logging import configure_logging
+from app.config import Settings, get_settings
+from app.exceptions import register_exception_handlers
+from app.logging import configure_logging
 from app.middleware.request_id import RequestIdMiddleware
 from app.routers import api_v1
 
@@ -30,15 +30,12 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         title=settings.APP_NAME,
         version=settings.APP_VERSION,
         lifespan=lifespan,
-        # In produzione niente Swagger pubblico.
         docs_url=None if settings.is_prod else "/api/docs",
         redoc_url=None,
         openapi_url=None if settings.is_prod else "/api/openapi.json",
     )
     app.state.settings = settings
 
-    # Ordine: l'ultimo aggiunto è il più esterno. Vogliamo RequestId più esterno
-    # di tutto, così anche gli errori CORS hanno un request id.
     app.add_middleware(GZipMiddleware, minimum_size=1024)
     app.add_middleware(
         CORSMiddleware,

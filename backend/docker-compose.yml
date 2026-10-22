@@ -24,12 +24,10 @@ services:
     env_file:
       - .env
     environment:
-      # Dentro la rete compose il DB si chiama `db`, non localhost.
       DATABASE_URL: postgresql+asyncpg://cicci:cicci@db:5432/cicci
     depends_on:
       db:
         condition: service_healthy
-    # `docker compose up --watch`: sincronizza il codice nel container e riavvia uvicorn.
     develop:
       watch:
         - action: sync+restart

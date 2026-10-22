@@ -25,7 +25,6 @@ log = structlog.get_logger("app.access")
 
 
 def get_request_id(request: Request) -> str | None:
-    """Request id della richiesta corrente, usato dagli exception handler."""
     value = request.scope.get("state", {}).get(_STATE_KEY)
     return value if isinstance(value, str) else None
 
@@ -47,7 +46,7 @@ class RequestIdMiddleware:
         structlog.contextvars.bind_contextvars(request_id=request_id)
 
         start = time.perf_counter()
-        status_code = 500  # se qualcosa esplode prima di send, logghiamo 500
+        status_code = 500
 
         async def send_with_header(message: Message) -> None:
             nonlocal status_code
