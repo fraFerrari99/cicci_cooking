@@ -3,11 +3,6 @@
 Piattaforma web di ricette senza pubblicità, con assistente di cottura hands-free
 e pannello autore. Monorepo: `backend/` (FastAPI) e, a breve, `frontend/` (Next.js).
 
-Documentazione di prodotto e architettura su Notion:
-- [0. Decisioni di Prodotto & Vincoli](https://app.notion.com/p/3f981cbb744b81779f05ff8584dfb1cc)
-- [2. Architettura & Schema Dati](https://app.notion.com/p/3f081cbb744b80b5a460e1a84a37e5e4)
-- [3. Kanban](https://app.notion.com/p/3f081cbb744b8073a12bd81a3e41ad55)
-
 ## Prerequisiti
 
 - [uv](https://docs.astral.sh/uv/) (gestisce Python 3.12 e le dipendenze)
