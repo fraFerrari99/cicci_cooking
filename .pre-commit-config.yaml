@@ -10,15 +10,6 @@ repos:
       - id: check-added-large-files
       - id: detect-private-key
 
-  - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.6.9
-    hooks:
-      - id: ruff
-        args: [--fix]
-        files: ^backend/
-      - id: ruff-format
-        files: ^backend/
-
   - repo: local
     hooks:
       - id: mypy
@@ -27,3 +18,15 @@ repos:
         language: system
         pass_filenames: false
         files: ^backend/app/
+      - id: ruff-check
+        name: ruff check (backend)
+        entry: uv run --project backend ruff check --fix
+        language: system
+        types: [python]
+        files: ^backend/
+      - id: ruff-format
+        name: ruff format (backend)
+        entry: uv run --project backend ruff format
+        language: system
+        types: [python]
+        files: ^backend/
