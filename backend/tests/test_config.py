@@ -41,3 +41,8 @@ def test_cors_origins_from_list() -> None:
 def test_invalid_env_rejected() -> None:
     with pytest.raises(ValidationError):
         _settings(ENV="staging")
+
+
+def test_explicit_log_level_wins_over_env() -> None:
+    s = _settings(LOG_LEVEL="INFO")
+    assert s.LOG_LEVEL == "INFO"

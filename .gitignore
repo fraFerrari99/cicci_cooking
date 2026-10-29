@@ -28,3 +28,10 @@ out/
 .idea/
 .vscode/
 *.swp
+
+backend/__pycache__/
+backend/*.py[cod]
+backend/.coverage
+backend/.ruff_cache/
+backend/.mypy_cache/
+backend/.pytest_cache/
