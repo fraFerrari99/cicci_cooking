@@ -3,9 +3,9 @@
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/backend/api/index.py" }
   ],
+  "regions": ["fra1"],
   "functions": {
     "backend/api/index.py": {
-      "runtime": "python3.12",
       "maxDuration": 30
     }
   }
