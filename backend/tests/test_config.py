@@ -8,9 +8,8 @@ def _settings(**kwargs: object) -> Settings:
     return Settings(_env_file=None, **kwargs)  # type: ignore[arg-type]
 
 
-def test_defaults_dev() -> None:
-    s = _settings()
-    assert s.ENV == "dev"
+def test_dev_derives_debug_and_log_level() -> None:
+    s = _settings(ENV="dev")
     assert s.DEBUG is True
     assert s.LOG_LEVEL == "DEBUG"
     assert s.is_prod is False
@@ -29,12 +28,12 @@ def test_explicit_debug_wins_over_env() -> None:
 
 
 def test_cors_origins_from_csv() -> None:
-    s = _settings(CORS_ORIGINS="http://a.test, http://b.test ,")
+    s = _settings(ENV="dev", CORS_ORIGINS="http://a.test, http://b.test ,")
     assert s.CORS_ORIGINS == ["http://a.test", "http://b.test"]
 
 
 def test_cors_origins_from_list() -> None:
-    s = _settings(CORS_ORIGINS=["http://a.test"])
+    s = _settings(ENV="dev", CORS_ORIGINS=["http://a.test"])
     assert s.CORS_ORIGINS == ["http://a.test"]
 
 
@@ -44,5 +43,11 @@ def test_invalid_env_rejected() -> None:
 
 
 def test_explicit_log_level_wins_over_env() -> None:
-    s = _settings(LOG_LEVEL="INFO")
+    s = _settings(ENV="dev", LOG_LEVEL="INFO")
     assert s.LOG_LEVEL == "INFO"
+
+
+def test_env_missing_raises_validation_error(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.delenv("ENV", raising=False)
+    with pytest.raises(ValidationError):
+        _settings()
