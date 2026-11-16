@@ -26,7 +26,7 @@ class Settings(BaseSettings):
 
     APP_NAME: str = "Cucina con Cicci API"
     APP_VERSION: str = Field(default_factory=_package_version)
-    ENV: Env = "dev"
+    ENV: Env
     DEBUG: bool | None = None
     LOG_LEVEL: LogLevel | None = None
 
